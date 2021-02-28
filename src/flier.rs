@@ -1,9 +1,12 @@
+use piston_window::{polygon, Context, Graphics, Transformed};
+use std::f64::consts::PI;
+
 pub struct Flier {
-  pub pos_x: f64,
-  pub pos_y: f64,
-  pub rotation: f64,
-  pub color: [f32; 4],
-  pub shape: [[f64; 2]; 3],
+  pos_x: f64,
+  pos_y: f64,
+  rotation: f64,
+  color: [f32; 4],
+  shape: [[f64; 2]; 3],
   target_x: f64,
   target_y: f64
 }
@@ -30,5 +33,13 @@ impl Flier {
     self.rotation = delta_y.atan2(delta_x);
     self.pos_x += self.rotation.cos() * speed;
     self.pos_y += self.rotation.sin() * speed;
+  }
+
+  pub fn draw<G: Graphics>(&mut self, c: &Context, g: &mut G) {
+    let transform = c
+      .transform
+      .trans(self.pos_x, self.pos_y)
+      .rot_rad(self.rotation + PI / 2.0);
+    polygon(self.color, &self.shape, transform, g);
   }
 }

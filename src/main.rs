@@ -1,5 +1,4 @@
 use piston_window::*;
-use std::f64::consts::PI;
 use std::thread;
 use std::time::Duration;
 use std::sync::{Mutex, Arc};
@@ -10,7 +9,7 @@ fn main() {
 	let (width, height) = (800, 600);
 	let opengl = OpenGL::V3_2;
 	let mut window: PistonWindow =
-		WindowSettings::new("Testink...", (width, height))
+		WindowSettings::new("Flier", (width, height))
 		.exit_on_esc(true)
 		.graphics_api(opengl)
 		.vsync(true)
@@ -36,11 +35,7 @@ fn main() {
 		}
 		window.draw_2d(&e, |c, g, _| {
 			clear([0.0, 0.0, 0.0, 1.0], g);
-			let transform = c
-				.transform
-				.trans(flier.pos_x, flier.pos_y)
-				.rot_rad(flier.rotation + PI / 2.0);
-			polygon(flier.color, &flier.shape, transform, g);
+      flier.draw(&c, g);
 		});
 	}
 }
