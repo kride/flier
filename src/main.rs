@@ -22,20 +22,22 @@ fn main() {
 		loop {
 			thread::sleep(Duration::from_millis(10));
       let mut flier = flier_clone.lock().unwrap();
-			flier.move_to_target();
+			flier.mover();
 		}
 	});
-	  
 
 	while let Some(e) = window.next() {
     let mut flier = flier.lock().unwrap();
 
-    if let Some(pos) = e.mouse_cursor_args() {
-      flier.set_target(pos[0] as f64, pos[1] as f64)
-		}
-		window.draw_2d(&e, |c, g, _| {
-			clear([0.0, 0.0, 0.0, 1.0], g);
-      flier.draw(&c, g);
-		});
+    if let Some(ButtonArgs { state, button, .. }) = e.button_args() {
+      flier.on_input(button, state);
+    }
+
+    if let Some(_r) = e.render_args() {
+      window.draw_2d(&e, |c, g, _| {
+        clear([0.0, 0.0, 0.0, 1.0], g);
+        flier.draw(&c, g);
+      });
+    }
 	}
 }
